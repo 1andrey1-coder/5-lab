@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* --- БЛОК ОТДЕЛЬНОГО МОДУЛЯ (ФУНКЦИЯ) --- */
+
 
 double** calculate_matrices(double** a, double** b, int n, char op) {
     double** res = (double**)malloc(n * sizeof(double*));
@@ -26,7 +26,6 @@ double** calculate_matrices(double** a, double** b, int n, char op) {
     return res;
 }
 
-/* --- ОСНОВНАЯ ПРОГРАММА --- */
 
 int main() {
     int n;
