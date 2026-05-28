@@ -1,25 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "matrix_op.h"
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
+/* --- БЛОК ОТДЕЛЬНОГО МОДУЛЯ (ФУНКЦИЯ) --- */
+
+double** calculate_matrices(double** a, double** b, int n, char op) {
+    double** res = (double**)malloc(n * sizeof(double*));
+    for (int i = 0; i < n; i++) {
+        res[i] = (double*)malloc(n * sizeof(double));
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (op == '+') {
+                res[i][j] = a[i][j] + b[i][j];
+            } else if (op == '-') {
+                res[i][j] = a[i][j] - b[i][j];
+            } else if (op == '*') {
+                res[i][j] = 0;
+                for (int k = 0; k < n; k++) {
+                    res[i][j] += a[i][k] * b[k][j];
+                }
+            }
+        }
+    }
+    return res;
+}
+
+/* --- ОСНОВНАЯ ПРОГРАММА --- */
 
 int main() {
-    #ifdef _WIN32
-    SetConsoleCP(65001);
-    SetConsoleOutputCP(65001);
-    #endif
-
     int n;
     char op;
 
-    printf("Введите размер матриц n: ");
-    if (scanf("%d", &n) != 1 || n <= 0) {
-        printf("Некорректный размер\n");
-        return 1;
-    }
+    printf("Введите размерность матриц n: ");
+    if (scanf("%d", &n) != 1) return 1;
 
     double** a = (double**)malloc(n * sizeof(double*));
     double** b = (double**)malloc(n * sizeof(double*));
@@ -45,12 +59,7 @@ int main() {
     printf("Введите знак операции (+, -, *): ");
     scanf(" %c", &op);
 
-    if (op != '+' && op != '-' && op != '*') {
-        printf("Неверная операция\n");
-        return 1;
-    }
-
-    double** result = calculateMatrix(a, b, n, op);
+    double** result = calculate_matrices(a, b, n, op);
 
     printf("Результат:\n");
     for (int i = 0; i < n; i++) {
