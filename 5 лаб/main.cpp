@@ -1,37 +1,33 @@
-#include <iostream>
-#include "matrix_ops.h"
-#include <windows.h>
+import heapq
 
-int main() {
-
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
-    setlocale(LC_ALL, "Russian");
-
-    int n;
-    char op;
-    std::cout << "¬ведите размер матрицы N: ";
-    std::cin >> n;
-
-    double** mat1 = allocateMatrix(n);
-    double** mat2 = allocateMatrix(n);
-
-    std::cout << "¬ведите элементы дл€ матрицы 1:" << std::endl;
-    inputMatrix(mat1, n);
-    std::cout << "¬ведите элементы дл€ матрицы 2:" << std::endl;
-    inputMatrix(mat2, n);
-
-    std::cout << "¬ведите операцию (+, -, *): ";
-    std::cin >> op;
-
-    double** res = calculateMatrix(mat1, mat2, n, op);
-
-    std::cout << "–езультат:" << std::endl;
-    printMatrix(res, n);
-
-    freeMatrix(mat1, n);
-    freeMatrix(mat2, n);
-    freeMatrix(res, n);
-
-    return 0;
+graph = {
+    'A': {'B': 1},
+    'B': {'A': 1, 'C': 2, 'D': 2, 'E': 7},
+    'C': {'B': 2, 'E': 3},
+    'D': {'B': 2, 'E': 4},
+    'E': {'B': 7, 'C': 3, 'D': 4}
 }
+
+def get_shortest_path(graph, start, end):
+    queue = [(0, start)]
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    
+    while queue:
+        current_dist, current_node = heapq.heappop(queue)
+        
+        if current_node == end:
+            return current_dist
+            
+        if current_dist > distances[current_node]:
+            continue
+            
+        for neighbor, weight in graph[current_node].items():
+            distance = current_dist + weight
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(queue, (distance, neighbor))
+                
+    return distances[end]
+
+print(get_shortest_path(graph, 'A', 'E'))
